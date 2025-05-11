@@ -1,0 +1,7 @@
+[submodule "playwright"]
+    path = playwright
+    url = https://github.com/alanSxSx/playwright.git
+
+[submodule "projnextauth"]
+    path = projnextauth
+    url = https://github.com/alanSxSx/projnextauth.git
