@@ -79,6 +79,9 @@ Docker: Contêineres para rodar o ambiente de desenvolvimento.
 🤝 Contribuindo
 Se você deseja contribuir para o projeto, sinta-se à vontade para fazer um fork, criar uma branch e enviar um pull request.
 
+![image](https://github.com/user-attachments/assets/4256904e-6679-46da-8cf9-c75402721a10)
+
+
 
 
 
