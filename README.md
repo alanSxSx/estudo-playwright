@@ -58,6 +58,12 @@ Instale as dependências do Playwright e execute os testes utilizando o Firefox 
   npm install
   npx playwright test --project=firefox --headed
 
+9. Instalar as dependências do Cumcumber e rodar os testes
+Instale as dependências do Cumcumber e execute os testes utilizando o Firefox e a interface gráfica (headed):
+
+  npm install
+  npm test
+
 📄 Execução dos Testes
 Após seguir todas as etapas acima, os testes estarão prontos para execução no Playwright. Os testes serão executados conforme a configuração do projeto, permitindo que você visualize os resultados na interface gráfica.
 
