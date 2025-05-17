@@ -1,0 +1,18 @@
+{
+  "name": "hellocucumber",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js",
+    "test:e2e": "cucumber-js --tags @e2e"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.2.0",
+    "@playwright/test": "^1.42.1",
+    "playwright": "^1.42.1"
+  }
+}
