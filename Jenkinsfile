@@ -6,15 +6,24 @@ pipeline {
         NEXTAUTH_URL = 'http://localhost:3001/'
     }
 
-    stages {
+    options {
+        skipDefaultCheckout()
+    }
 
-        stage('Clonar Repositorio Principal') {
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+
+        stage('Clonar Repositório Principal') {
             steps {
                 bat 'git clone https://github.com/alanSxSx/estudo-playwright.git'
             }
         }
 
-        stage('Clonar Submodulos') {
+        stage('Clonar Submódulos') {
             steps {
                 dir('estudo-playwright') {
                     bat 'git submodule update --init --recursive'
@@ -30,7 +39,7 @@ pipeline {
             }
         }
 
-        stage('Configurar NextAuth .env') {
+        stage('Criar .env do NextAuth') {
             steps {
                 dir('estudo-playwright/projnextauth') {
                     script {
@@ -43,12 +52,18 @@ NEXTAUTH_URL=${env.NEXTAUTH_URL}
             }
         }
 
-        stage('Instalar e Rodar NextAuth') {
+        stage('Instalar Dependências NextAuth') {
             steps {
                 dir('estudo-playwright/projnextauth') {
                     bat 'npm install'
-                    bat 'nohup npm run dev &'
-                    // Esperar o servidor subir
+                }
+            }
+        }
+
+        stage('Iniciar NextAuth em segundo plano (Windows)') {
+            steps {
+                dir('estudo-playwright/projnextauth') {
+                    bat 'start /B npm run dev'
                     sleep time: 10, unit: 'SECONDS'
                 }
             }
@@ -76,7 +91,9 @@ NEXTAUTH_URL=${env.NEXTAUTH_URL}
     post {
         always {
             echo 'Finalizando pipeline...'
-            bat 'docker-compose down || true'
+            dir('estudo-playwright') {
+                bat 'docker-compose down || exit 0'
+            }
         }
     }
 }
