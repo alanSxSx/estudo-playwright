@@ -3,5 +3,5 @@
     url = https://github.com/alanSxSx/playwright.git
 
 [submodule "projnextauth"]
-    path = projnextauth
-    url = https://github.com/alanSxSx/projnextauth.git
+	path = projnextauth
+	url = https://github.com/alanSxSx/projnextauth.git
