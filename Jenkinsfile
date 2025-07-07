@@ -8,16 +8,16 @@ pipeline {
 
     stages {
 
-        stage('Clonar Repositório Principal') {
+        stage('Clonar Repositorio Principal') {
             steps {
-                sh 'git clone https://github.com/alanSxSx/estudo-playwright.git'
+                bat 'git clone https://github.com/alanSxSx/estudo-playwright.git'
             }
         }
 
-        stage('Clonar Submódulos') {
+        stage('Clonar Submodulos') {
             steps {
                 dir('estudo-playwright') {
-                    sh 'git submodule update --init --recursive'
+                    bat 'git submodule update --init --recursive'
                 }
             }
         }
@@ -25,7 +25,7 @@ pipeline {
         stage('Subir Containers Docker') {
             steps {
                 dir('estudo-playwright') {
-                    sh 'docker-compose up -d'
+                    bat 'docker-compose up -d'
                 }
             }
         }
@@ -46,8 +46,8 @@ NEXTAUTH_URL=${env.NEXTAUTH_URL}
         stage('Instalar e Rodar NextAuth') {
             steps {
                 dir('estudo-playwright/projnextauth') {
-                    sh 'npm install'
-                    sh 'nohup npm run dev &'
+                    bat 'npm install'
+                    bat 'nohup npm run dev &'
                     // Esperar o servidor subir
                     sleep time: 10, unit: 'SECONDS'
                 }
@@ -57,8 +57,8 @@ NEXTAUTH_URL=${env.NEXTAUTH_URL}
         stage('Instalar e Rodar Testes - Playwright') {
             steps {
                 dir('estudo-playwright/playwright') {
-                    sh 'npm install'
-                    sh 'npx playwright test --project=firefox --headed'
+                    bat 'npm install'
+                    bat 'npx playwright test --project=firefox --headed'
                 }
             }
         }
@@ -66,8 +66,8 @@ NEXTAUTH_URL=${env.NEXTAUTH_URL}
         stage('Instalar e Rodar Testes - Cucumber') {
             steps {
                 dir('estudo-playwright/playwright') {
-                    sh 'npm install'
-                    sh 'npm test'
+                    bat 'npm install'
+                    bat 'npm test'
                 }
             }
         }
@@ -76,7 +76,7 @@ NEXTAUTH_URL=${env.NEXTAUTH_URL}
     post {
         always {
             echo 'Finalizando pipeline...'
-            sh 'docker-compose down || true'
+            bat 'docker-compose down || true'
         }
     }
 }
