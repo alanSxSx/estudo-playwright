@@ -17,13 +17,13 @@ pipeline {
             }
         }
 
-        stage('Clonar Repositório Principal') {
+        stage('Clonar Repositorio Principal') {
             steps {
                 bat 'git clone https://github.com/alanSxSx/estudo-playwright.git'
             }
         }
 
-        stage('Clonar Submódulos') {
+        stage('Clonar Submodulos') {
             steps {
                 dir('estudo-playwright') {
                     bat 'git submodule update --init --recursive'
@@ -44,9 +44,9 @@ pipeline {
                 dir('estudo-playwright/projnextauth') {
                     script {
                         writeFile file: '.env', text: """
-NEXTAUTH_SECRET=${env.NEXTAUTH_SECRET}
-NEXTAUTH_URL=${env.NEXTAUTH_URL}
-"""
+													NEXTAUTH_SECRET=${env.NEXTAUTH_SECRET}
+													NEXTAUTH_URL=${env.NEXTAUTH_URL}
+													"""
                     }
                 }
             }
@@ -56,6 +56,7 @@ NEXTAUTH_URL=${env.NEXTAUTH_URL}
             steps {
                 dir('estudo-playwright/projnextauth') {
                     bat 'npm install'
+										bat 'npm run build'
                 }
             }
         }
@@ -80,7 +81,7 @@ NEXTAUTH_URL=${env.NEXTAUTH_URL}
 
         stage('Instalar e Rodar Testes - Cucumber') {
             steps {
-                dir('estudo-playwright/playwright') {
+                dir('estudo-playwright/hellocucumber') {
                     bat 'npm install'
                     bat 'npm test'
                 }
