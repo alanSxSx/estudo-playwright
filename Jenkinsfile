@@ -56,6 +56,7 @@ pipeline {
             steps {
                 dir('estudo-playwright/projnextauth') {
                     bat 'npm install'
+										bat 'npm run build'
 										bat 'npm run start -- -p 3001'
                 }
             }
