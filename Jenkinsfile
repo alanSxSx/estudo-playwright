@@ -52,22 +52,13 @@ pipeline {
             }
         }
 
-        stage('Instalar Dependencias NextAuth') {
+        stage('Instalar Dependencias NextAuth e Iniciar Front End') {
             steps {
                 dir('estudo-playwright/projnextauth') {
                     bat 'npm install'
 										bat 'npm run build'
 										bat 'start /B npm run start -- -p 3001'
-										sleep time: 5, unit: 'SECONDS'
-                }
-            }
-        }
-
-        stage('Iniciar NextAuth em segundo plano (Windows)') {
-            steps {
-                dir('estudo-playwright/projnextauth') {
-                    bat 'start /B npm run dev'
-                    sleep time: 10, unit: 'SECONDS'
+										sleep time: 10, unit: 'SECONDS'
                 }
             }
         }
