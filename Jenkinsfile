@@ -52,11 +52,11 @@ pipeline {
             }
         }
 
-        stage('Instalar Dependências NextAuth') {
+        stage('Instalar Dependencias NextAuth') {
             steps {
                 dir('estudo-playwright/projnextauth') {
                     bat 'npm install'
-										bat 'npm run build'
+										bat 'npm run start'
                 }
             }
         }
