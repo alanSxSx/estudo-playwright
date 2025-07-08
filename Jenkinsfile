@@ -57,7 +57,8 @@ pipeline {
                 dir('estudo-playwright/projnextauth') {
                     bat 'npm install'
 										bat 'npm run build'
-										bat 'npm run start -- -p 3001'
+										bat 'start /B npm run start -- -p 3001'
+										sleep time: 5, unit: 'SECONDS'
                 }
             }
         }
