@@ -33,7 +33,7 @@ services:
       - "3001:3001"
     environment:
       NEXTAUTH_SECRET: teste9999999
-      NEXTAUTH_URL: http://localhost:3001
+      NEXTAUTH_URL: http://frontend:3001
     depends_on:
       - backend
 
