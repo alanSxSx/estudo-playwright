@@ -32,36 +32,16 @@ pipeline {
         }
 
         stage('Subir Infraestrutura Docker') {
-            steps {
-                dir('estudo-playwright') {
-                    bat 'docker-compose up -d db backend frontend'
-                    // Espera o frontend subir antes de rodar os testes
-                    bat '''
-											powershell -Command "
-											$maxAttempts = 10
-											$success = $false
-											for ($i = 1; $i -le $maxAttempts; $i++) {
-													try {
-															$response = Invoke-WebRequest -Uri http://localhost:3001 -UseBasicParsing -TimeoutSec 2
-															if ($response.StatusCode -eq 200) {
-																	Write-Host \\"Frontend no ar!\\"
-																	$success = $true
-																	break
-															}
-													} catch {
-															Write-Host \\"Aguardando frontend... Tentativa $i\\"
-															Start-Sleep -Seconds 2
-													}
-											}
-											if (-not $success) {
-													Write-Host \\"Erro: o frontend não respondeu na porta 3001\\"
-													exit 1
-											}
-											"
-											'''
-                }
-            }
-        }
+						steps {
+								dir('estudo-playwright') {
+										bat 'docker-compose up -d db backend frontend'
+										echo 'Aguardando frontend subir...'
+										sleep time: 10, unit: 'SECONDS'
+								}
+					}
+			}
+    }
+}
 
         stage('Executar Testes - Playwright') {
             steps {
