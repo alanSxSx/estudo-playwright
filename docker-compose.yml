@@ -49,6 +49,8 @@ services:
   cucumber:
     build:
       context: ./hellocucumber
+    environment:
+      BASE_URL: http://frontend:3001
     depends_on:
       - frontend
 
