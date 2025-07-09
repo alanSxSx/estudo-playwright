@@ -2,70 +2,67 @@ pipeline {
     agent any
 
     environment {
-        NEXTAUTH_SECRET = 'teste9999999'
-        NEXTAUTH_URL = 'http://localhost:3001'
-				BACKEND_URL=	'http://backend:3000'
-    }
-
-    options {
-        skipDefaultCheckout()
+        scannerHome = tool 'SONAR_SCANNER'
     }
 
     stages {
-        stage('Clean Workspace') {
+
+        stage('Install Dependencies') {
             steps {
-                deleteDir()
+                bat 'docker-compose run --rm backend npm install'
+                bat 'docker-compose run --rm frontend npm install'
             }
         }
 
-        stage('Clonar Repositorio Principal') {
+        stage('Build & Start Containers') {
             steps {
-                bat 'git clone https://github.com/alanSxSx/estudo-playwright.git'
+                bat 'docker-compose build'
+                bat 'docker-compose up -d'
+                sleep(10) // aguarda os serviços subirem
             }
         }
 
-        stage('Clonar Submodulos') {
+        stage('Functional Tests') {
             steps {
-                dir('estudo-playwright') {
-                    bat 'git submodule update --init --recursive'
+                bat 'docker-compose run --rm playwright'
+                bat 'docker-compose run --rm cucumber'
+            }
+        }
+
+        stage('Sonar Analysis') {
+            steps {
+                withSonarQubeEnv('SONAR_LOCAL') {
+                    bat "${scannerHome}\\bin\\sonar-scanner -e " +
+                        "-Dsonar.projectKey=projeto-qa " +
+                        "-Dsonar.sources=backend,projnextauth " +
+                        "-Dsonar.tests=playwright,hellocucumber " +
+                        "-Dsonar.test.inclusions=**/*.test.ts,**/*.steps.ts " +
+                        "-Dsonar.exclusions=**/node_modules/**,**/dist/**,**/coverage/** " +
+                        "-Dsonar.sourceEncoding=UTF-8"
                 }
             }
         }
 
-        stage('Subir Infraestrutura Docker') {
-						steps {
-								dir('estudo-playwright') {
-										bat 'docker-compose up -d db backend frontend'
-										echo 'Aguardando frontend subir...'
-										sleep time: 15, unit: 'SECONDS'
-								}
-					}
-			}
-
-
-        stage('Executar Testes Playwright') {
+        stage('Quality Gate') {
             steps {
-                dir('estudo-playwright') {
-                    bat 'docker-compose run --rm playwright'
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
 
-        stage('Executar Testes - Cucumber') {
+        stage('Health Check') {
             steps {
-                dir('estudo-playwright') {
-                    bat 'docker-compose run --rm cucumber'
-                }
+                bat 'curl -I http://localhost:3001 || exit 1'
+                bat 'curl -I http://localhost:3000/health || exit 1'
             }
         }
     }
 
     post {
         always {
-            echo 'Finalizando pipeline..'
-            dir('estudo-playwright') {
-                bat 'docker-compose down --volumes --remove-orphans || exit 0'
-            }
+            echo 'Pipeline finalizado. Você pode configurar emails ou relatórios aqui.'
+            bat 'docker-compose down -v'
         }
     }
 }
