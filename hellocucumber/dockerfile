@@ -1,12 +1,10 @@
-FROM node:18-slim
+FROM mcr.microsoft.com/playwright:v1.42.1
 
 WORKDIR /tests
 
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm install
 
 COPY . .
 
-RUN npx playwright install --with-deps
-
-CMD ["npm", "test"]
+CMD ["npx", "cucumber-js"]
