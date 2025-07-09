@@ -42,7 +42,7 @@ pipeline {
 			}
 
 
-        stage('Executar Testes - Playwright') {
+        stage('Executar Testes Playwright') {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose run --rm playwright'
