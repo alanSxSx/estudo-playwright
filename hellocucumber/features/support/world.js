@@ -11,7 +11,7 @@ class CustomWorld {
   async init() {
     try {
       this.browser = await chromium.launch({
-        headless: false,
+        headless: true,
         slowMo: 100 // Adiciona um pequeno delay para melhor visualização
       });
       this.context = await this.browser.newContext({
