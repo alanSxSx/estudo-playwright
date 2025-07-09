@@ -36,7 +36,7 @@ pipeline {
 								dir('estudo-playwright') {
 										bat 'docker-compose up -d db backend frontend'
 										echo 'Aguardando frontend subir...'
-										sleep time: 10, unit: 'SECONDS'
+										sleep time: 15, unit: 'SECONDS'
 								}
 					}
 			}
