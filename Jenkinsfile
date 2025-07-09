@@ -17,13 +17,13 @@ pipeline {
             }
         }
 
-        stage('Clonar Repositório Principal') {
+        stage('Clonar Repositorio Principal') {
             steps {
                 bat 'git clone https://github.com/alanSxSx/estudo-playwright.git'
             }
         }
 
-        stage('Clonar Submódulos') {
+        stage('Clonar Submodulos') {
             steps {
                 dir('estudo-playwright') {
                     bat 'git submodule update --init --recursive'
