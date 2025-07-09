@@ -61,7 +61,7 @@ pipeline {
 
     post {
         always {
-            echo 'Finalizando pipeline...'
+            echo 'Finalizando pipeline'
             dir('estudo-playwright') {
                 bat 'docker-compose down --volumes --remove-orphans || exit 0'
             }
