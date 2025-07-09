@@ -63,7 +63,7 @@ pipeline {
         always {
             echo 'Finalizando pipeline...'
             dir('estudo-playwright') {
-                bat 'docker-compose down || exit 0'
+                bat 'docker-compose down --volumes --remove-orphans || exit 0'
             }
         }
     }
