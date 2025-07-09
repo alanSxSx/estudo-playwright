@@ -37,19 +37,27 @@ pipeline {
                     bat 'docker-compose up -d db backend frontend'
                     // Espera o frontend subir antes de rodar os testes
                     bat '''
-											@echo off
-											echo Aguardando o frontend subir...
-											for /L %%i in (1,1,10) do (
-												curl -s http://localhost:3001 > nul
-												if !errorlevel! equ 0 (
-													echo Frontend no ar!
-													exit /b 0
-												)
-												echo Aguardando...
-												timeout /t 2 > nul
-											)
-											echo Erro: o frontend não respondeu na porta 3001
-											exit /b 1
+											powershell -Command "
+											$maxAttempts = 10
+											$success = $false
+											for ($i = 1; $i -le $maxAttempts; $i++) {
+													try {
+															$response = Invoke-WebRequest -Uri http://localhost:3001 -UseBasicParsing -TimeoutSec 2
+															if ($response.StatusCode -eq 200) {
+																	Write-Host \\"Frontend no ar!\\"
+																	$success = $true
+																	break
+															}
+													} catch {
+															Write-Host \\"Aguardando frontend... Tentativa $i\\"
+															Start-Sleep -Seconds 2
+													}
+											}
+											if (-not $success) {
+													Write-Host \\"Erro: o frontend não respondeu na porta 3001\\"
+													exit 1
+											}
+											"
 											'''
                 }
             }
