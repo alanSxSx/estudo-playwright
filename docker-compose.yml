@@ -26,5 +26,28 @@ services:
     depends_on:
       - db
 
+  frontend:
+    build:
+      context: ./projnextauth
+    ports:
+      - "3001:3000"
+    environment:
+      NEXTAUTH_SECRET: teste9999999
+      NEXTAUTH_URL: http://localhost:3001/
+    depends_on:
+      - backend
+
+  playwright:
+    build:
+      context: ./playwright
+    depends_on:
+      - frontend
+
+  cucumber:
+    build:
+      context: ./hellocucumber
+    depends_on:
+      - frontend
+
 volumes:
   pgdata:

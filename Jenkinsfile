@@ -17,13 +17,13 @@ pipeline {
             }
         }
 
-        stage('Clonar Repositorio Principal') {
+        stage('Clonar Repositório Principal') {
             steps {
                 bat 'git clone https://github.com/alanSxSx/estudo-playwright.git'
             }
         }
 
-        stage('Clonar Submodulos') {
+        stage('Clonar Submódulos') {
             steps {
                 dir('estudo-playwright') {
                     bat 'git submodule update --init --recursive'
@@ -31,52 +31,42 @@ pipeline {
             }
         }
 
-        stage('Subir Containers Docker') {
+        stage('Subir Infraestrutura Docker') {
             steps {
                 dir('estudo-playwright') {
-                    bat 'docker-compose up -d'
+                    bat 'docker-compose up -d db backend frontend'
+                    // Espera o frontend subir antes de rodar os testes
+                    bat '''
+											@echo off
+											echo Aguardando o frontend subir...
+											for /L %%i in (1,1,10) do (
+												curl -s http://localhost:3001 > nul
+												if !errorlevel! equ 0 (
+													echo Frontend no ar!
+													exit /b 0
+												)
+												echo Aguardando...
+												timeout /t 2 > nul
+											)
+											echo Erro: o frontend não respondeu na porta 3001
+											exit /b 1
+											'''
                 }
             }
         }
 
-        stage('Criar .env do NextAuth') {
+        stage('Executar Testes - Playwright') {
             steps {
-                dir('estudo-playwright/projnextauth') {
-                    script {
-                        writeFile file: '.env', text: """
-													NEXTAUTH_SECRET=${env.NEXTAUTH_SECRET}
-													NEXTAUTH_URL=${env.NEXTAUTH_URL}
-													"""
-                    }
+                dir('estudo-playwright') {
+                    bat 'docker-compose run --rm playwright'
                 }
             }
         }
 
-        stage('Instalar Dependencias NextAuth e Iniciar Front End') {
+        stage('Executar Testes - Cucumber') {
             steps {
-                dir('estudo-playwright/projnextauth') {
-                    bat 'npm install'
-										bat 'npm run build'
-										bat 'start /B npm run start -- -p 3001'
-										sleep time: 10, unit: 'SECONDS'
-                }
-            }
-        }
-
-        stage('Instalar e Rodar Testes - Playwright') {
-            steps {
-                dir('estudo-playwright/playwright') {
-                    bat 'npm install'
-                    bat 'npx playwright test --project=firefox --headed'
-                }
-            }
-        }
-
-        stage('Instalar e Rodar Testes - Cucumber') {
-            steps {
-                dir('estudo-playwright/hellocucumber') {
-                    bat 'npm install'
-                    bat 'npm test'
+                dir('estudo-playwright') {
+                    bat 'docker-compose run --rm cucumber'
                 }
             }
         }
