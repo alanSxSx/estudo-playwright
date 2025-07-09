@@ -40,8 +40,7 @@ pipeline {
 								}
 					}
 			}
-    }
-}
+
 
         stage('Executar Testes - Playwright') {
             steps {
