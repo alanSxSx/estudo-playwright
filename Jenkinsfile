@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         NEXTAUTH_SECRET = 'teste9999999'
-        NEXTAUTH_URL = 'http://localhost:3001/'
+        NEXTAUTH_URL = 'http://backend:3000'
     }
 
     options {
