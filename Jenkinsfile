@@ -49,7 +49,7 @@ pipeline {
                     // Sobe todos os serviços de uma vez: db, backend, frontend, pg-sonar, sonarqube
                     bat 'docker-compose up -d'
                     echo 'Aguardando containers subirem...'
-                    sleep time: 45, unit: 'SECONDS' // SonarQube demora pra subir
+                    sleep time: 45, unit: 'SECONDS'
                 }
             }
         }
@@ -75,13 +75,13 @@ pipeline {
             steps {
                 dir('estudo-playwright') {
                     withSonarQubeEnv('SONAR_LOCAL') {
-                        bat "${scannerHome}\\bin\\sonar-scanner " +
-                            "-Dsonar.projectKey=projeto-qa " +
-                            "-Dsonar.sources=backend,projnextauth " +
-                            "-Dsonar.tests=playwright,hellocucumber " +
-                            "-Dsonar.test.inclusions=**/*.test.ts,**/*.steps.ts " +
-                            "-Dsonar.exclusions=**/node_modules/**,**/dist/**,**/coverage/** " +
-                            "-Dsonar.sourceEncoding=UTF-8"
+                    bat "${scannerHome}\\bin\\sonar-scanner -e " +
+                        "-Dsonar.projectKey=DeployBack " +
+                        "-Dsonar.host.url=http://localhost:9000 " +
+                        "-Dsonar.login= " +
+                        "-Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml " +
+                        "-Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**/Application.java " +
+                        "-Dsonar.java.binaries=target"
                     }
                 }
             }
@@ -110,7 +110,7 @@ pipeline {
         always {
             echo 'Finalizando pipeline e removendo containers...'
             dir('estudo-playwright') {
-                bat 'docker-compose down --volumes --remove-orphans || exit 0'
+                bat 'docker-compose rm -f || exit 0'
             }
         }
     }
