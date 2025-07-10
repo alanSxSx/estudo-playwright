@@ -19,13 +19,13 @@ pipeline {
             }
         }
 
-        stage('Clonar Repositório') {
+        stage('Clonar Repositorio') {
             steps {
                 bat 'git clone https://github.com/alanSxSx/estudo-playwright.git'
             }
         }
 
-        stage('Atualizar Submódulos') {
+        stage('Atualizar Submodulos') {
             steps {
                 dir('estudo-playwright') {
                     bat 'git submodule update --init --recursive'
@@ -33,7 +33,7 @@ pipeline {
             }
         }
 
-        stage('Instalar Dependências (Node.js)') {
+        stage('Instalar Dependencias (Node.js)') {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose run --rm backend npm install'
@@ -71,11 +71,11 @@ pipeline {
             }
         }
 
-        stage('Análise SonarQube') {
+        stage('Analise SonarQube') {
             steps {
                 dir('estudo-playwright') {
                     withSonarQubeEnv('SONAR_LOCAL') {
-                    bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.login=sqp_07e03523d14e492a4d76fab564bdc8eabc04367f"
+                    bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.login=sqa_9efad1dbc88e9bb045c0cbc5f282080d8f07a33f"
                     }
                 }
             }
