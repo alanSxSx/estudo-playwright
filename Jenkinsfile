@@ -75,13 +75,7 @@ pipeline {
             steps {
                 dir('estudo-playwright') {
                     withSonarQubeEnv('SONAR_LOCAL') {
-                    bat "${scannerHome}\\bin\\sonar-scanner -e " +
-                        "-Dsonar.projectKey=DeployBack " +
-                        "-Dsonar.host.url=http://localhost:9000 " +
-                        "-Dsonar.login= " +
-                        "-Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml " +
-                        "-Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**/Application.java " +
-                        "-Dsonar.java.binaries=target"
+                    bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.login=sqp_07e03523d14e492a4d76fab564bdc8eabc04367f"
                     }
                 }
             }
