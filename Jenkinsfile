@@ -13,19 +13,19 @@ pipeline {
     }
 
     stages {
-        stage('Clean Workspace') {
+        stage('Limpar Workspace') {
             steps {
                 deleteDir()
             }
         }
 
-        stage('Clonar Repositorio Principal') {
+        stage('Clonar Repositório') {
             steps {
                 bat 'git clone https://github.com/alanSxSx/estudo-playwright.git'
             }
         }
 
-        stage('Clonar Submodulos') {
+        stage('Atualizar Submódulos') {
             steps {
                 dir('estudo-playwright') {
                     bat 'git submodule update --init --recursive'
@@ -33,7 +33,7 @@ pipeline {
             }
         }
 
-        stage('Instalar Dependências') {
+        stage('Instalar Dependências (Node.js)') {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose run --rm backend npm install'
@@ -42,12 +42,14 @@ pipeline {
             }
         }
 
-        stage('Build & Start Containers') {
+        stage('Build e Subir Todos os Containers') {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose build'
+                    // Sobe todos os serviços de uma vez: db, backend, frontend, pg-sonar, sonarqube
                     bat 'docker-compose up -d'
-                    sleep(time: 15, unit: 'SECONDS')
+                    echo 'Aguardando containers subirem...'
+                    sleep time: 45, unit: 'SECONDS' // SonarQube demora pra subir
                 }
             }
         }
@@ -56,7 +58,7 @@ pipeline {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose run --rm playwright'
-										sleep time: 5, unit: 'SECONDS'
+                    sleep time: 5, unit: 'SECONDS'
                 }
             }
         }
@@ -73,7 +75,7 @@ pipeline {
             steps {
                 dir('estudo-playwright') {
                     withSonarQubeEnv('SONAR_LOCAL') {
-                        bat "${scannerHome}\\bin\\sonar-scanner -e " +
+                        bat "${scannerHome}\\bin\\sonar-scanner " +
                             "-Dsonar.projectKey=projeto-qa " +
                             "-Dsonar.sources=backend,projnextauth " +
                             "-Dsonar.tests=playwright,hellocucumber " +
@@ -98,6 +100,7 @@ pipeline {
                 dir('estudo-playwright') {
                     bat 'curl -I http://localhost:3001 || exit 1'
                     bat 'curl -I http://localhost:3000/health || exit 1'
+                    bat 'curl -I http://localhost:9000 || exit 1'
                 }
             }
         }
@@ -105,7 +108,7 @@ pipeline {
 
     post {
         always {
-            echo 'Finalizando pipeline...'
+            echo 'Finalizando pipeline e removendo containers...'
             dir('estudo-playwright') {
                 bat 'docker-compose down --volumes --remove-orphans || exit 0'
             }
