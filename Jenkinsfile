@@ -58,7 +58,7 @@ pipeline {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose run --rm playwright'
-                    sleep time: 5, unit: 'SECONDS'
+                    sleep time: 10, unit: 'SECONDS'
                 }
             }
         }
