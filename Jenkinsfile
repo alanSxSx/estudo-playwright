@@ -42,6 +42,14 @@ pipeline {
             }
         }
 
+				stage('Executar testes unitários') {
+            steps {
+								dir('estudo-playwright') {
+									bat 'npx jest functional.spec'
+								}
+            }
+        }
+
         stage('Build e Subir Todos os Containers') {
             steps {
                 dir('estudo-playwright') {
@@ -51,6 +59,14 @@ pipeline {
                     echo 'Aguardando containers subirem...'
                     sleep time: 45, unit: 'SECONDS'
                 }
+            }
+        }
+
+				stage('Executar testes de API') {
+            steps {
+								dir('estudo-playwright') {
+									bat 'npx jest api.spec'
+								}
             }
         }
 
