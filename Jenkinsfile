@@ -100,12 +100,4 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            echo 'Finalizando pipeline e removendo containers...'
-            dir('estudo-playwright') {
-                bat 'docker-compose rm -f || exit 0'
-            }
-        }
-    }
 }
