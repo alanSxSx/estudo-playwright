@@ -137,4 +137,5 @@ app.get('/usuarios', autenticarToken, async (req, res) => {
 	}
 });
 
-module.exports = { app, pool };
+module.exports = app;
+module.exports.pool = pool;

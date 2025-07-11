@@ -65,7 +65,7 @@ pipeline {
 
 				stage('Executar testes de API') {
             steps {
-								dir('estudo-playwright') {
+								dir('estudo-playwright/backend') {
 									bat 'npx jest api.spec'
 								}
             }
