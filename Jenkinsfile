@@ -67,6 +67,7 @@ pipeline {
             steps {
 								dir('estudo-playwright/backend') {
 									bat 'npx jest api.spec'
+									sleep time: 10, unit: 'SECONDS'
 								}
             }
         }
