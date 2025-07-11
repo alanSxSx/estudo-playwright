@@ -56,7 +56,7 @@ pipeline {
 
 				stage('Executar testes unitarios') {
             steps {
-								dir('estudo-playwright') {
+								dir('estudo-playwright/backend') {
 									bat 'npx jest functional.spec'
 								}
             }
