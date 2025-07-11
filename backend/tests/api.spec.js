@@ -1,5 +1,6 @@
 const request = require('supertest');
-const { app, pool } = require('../app');
+const {app, pool}  = require('../app');
+
 
 let usuarioIdCriado = null; // Variável compartilhada entre testes
 let token = null;
