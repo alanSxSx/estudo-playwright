@@ -46,7 +46,6 @@ pipeline {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose build'
-                    // Sobe todos os serviços de uma vez: db, backend, frontend, pg-sonar, sonarqube
                     bat 'docker-compose up -d'
                     echo 'Aguardando containers subirem...'
                     sleep time: 45, unit: 'SECONDS'
@@ -63,7 +62,7 @@ pipeline {
             }
         }
 
-				stage('Executar Testes Backend') {
+        stage('Executar Testes Backend') {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose run --rm jest'
@@ -83,15 +82,15 @@ pipeline {
             steps {
                 dir('estudo-playwright') {
                     withSonarQubeEnv('SONAR_LOCAL') {
-                    bat """
-    ${scannerHome}\\bin\\sonar-scanner ^
-      -Dsonar.projectBaseDir=backend ^
-      -Dsonar.projectKey=backend-api ^
-      -Dsonar.sources=. ^
-      -Dsonar.exclusions=**/node_modules/**,**/__tests__/**,**/*.test.js,**/*.spec.js ^
-      -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info ^
-      -Dsonar.login=sqa_9efad1dbc88e9bb045c0cbc5f282080d8f07a33f
-"""
+                        bat """
+                          ${scannerHome}\\bin\\sonar-scanner ^
+                        -Dsonar.projectBaseDir=backend ^
+                        -Dsonar.projectKey=backend-api ^
+                        -Dsonar.sources=. ^
+                        -Dsonar.exclusions=**/node_modules/**,**/__tests__/**,**/*.test.js,**/*.spec.js,**/coverage/** ^
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info ^
+                        -Dsonar.login=sqa_9efad1dbc88e9bb045c0cbc5f282080d8f07a33f
+                        """
                     }
                 }
             }
@@ -115,5 +114,4 @@ pipeline {
             }
         }
     }
-
 }
