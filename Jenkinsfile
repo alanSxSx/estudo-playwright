@@ -63,6 +63,14 @@ pipeline {
             }
         }
 
+				stage('Executar Testes Backend') {
+            steps {
+                dir('estudo-playwright') {
+                    bat 'docker-compose run --rm jest'
+                }
+            }
+        }
+
         stage('Executar Testes - Cucumber') {
             steps {
                 dir('estudo-playwright') {
