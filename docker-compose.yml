@@ -37,6 +37,17 @@ services:
       BACKEND_URL: http://backend:3000
     depends_on:
       - backend
+  jest:
+    build:
+      context: ./backend
+    command: ["npm", "run", "test"]
+    environment:
+      DB_HOST: db
+      DB_NAME: test_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - db
 
   playwright:
     build:

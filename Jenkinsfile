@@ -54,24 +54,6 @@ pipeline {
             }
         }
 
-				stage('Executar testes unitarios') {
-            steps {
-								dir('estudo-playwright/backend') {
-									bat 'npm install'
-									bat 'npx jest functional.spec'
-								}
-            }
-        }
-
-				stage('Executar testes de API') {
-            steps {
-								dir('estudo-playwright/backend') {
-									bat 'npx jest api.spec'
-									sleep time: 10, unit: 'SECONDS'
-								}
-            }
-        }
-
         stage('Executar Testes - Playwright') {
             steps {
                 dir('estudo-playwright') {
