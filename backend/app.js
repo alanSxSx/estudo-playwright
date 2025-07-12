@@ -49,7 +49,7 @@ app.get('/db-health', async (req, res) => {
 
 
 app.post('/login' , async (req, res) => {
-	const { email, senha, tipo } = req.body;
+	const { email, senha } = req.body;
 
 	if (!email || !senha) {
 		return res.status(400).json({ erro: 'E-mail e senha são obrigatórios' });
