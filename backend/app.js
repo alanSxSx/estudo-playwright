@@ -9,6 +9,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json()); // Permitir JSON no body das requisições
+app.disable('x-powered-by');
 
 app.use(cors({
 	origin: 'http://localhost:3001',
