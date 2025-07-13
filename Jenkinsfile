@@ -47,8 +47,8 @@ pipeline {
                 dir('estudo-playwright') {
                     bat 'docker-compose build'
                     bat 'docker-compose up -d'
-                    echo 'Aguardando containers subirem...'
-                    sleep time: 45, unit: 'SECONDS'
+                    echo 'Aguardando banco de dados (PostgreSQL) ficar disponível...'
+                    bat 'docker-compose run --rm backend ./wait-for-it.sh db:5432 -t 60 -- echo "Banco OK"'
                 }
             }
         }
