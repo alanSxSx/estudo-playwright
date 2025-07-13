@@ -47,17 +47,26 @@ pipeline {
                 dir('estudo-playwright') {
                     bat 'docker-compose build'
                     bat 'docker-compose up -d'
-                    echo 'Aguardando banco de dados (PostgreSQL) ficar disponível...'
-                    bat 'docker-compose run --rm backend ./wait-for-it.sh db:5432 -t 60 -- echo "Banco OK"'
-                }
-            }
+                    echo 'Aguardando o backend ficar disponível (http://localhost:3000/health)...'
+                    bat '''
+                      for /L %%i in (1,1,12) do (
+                      curl -s -o nul -w "%%{http_code}" http://localhost:3000/health && goto ok
+                      echo Tentativa %%i falhou, aguardando...
+                      timeout /T 5 >nul
+                      )
+                      echo Falha ao conectar no backend.
+                      exit /B 1
+                      :ok
+                      echo Backend OK
+                      '''
         }
+    }
+}
 
         stage('Executar Testes - Playwright') {
             steps {
                 dir('estudo-playwright') {
                     bat 'docker-compose run --rm playwright'
-                    sleep time: 10, unit: 'SECONDS'
                 }
             }
         }
