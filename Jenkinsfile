@@ -59,9 +59,9 @@ pipeline {
                       :ok
                       echo Backend OK
                       '''
+            }
+          }
         }
-    }
-}
 
         stage('Executar Testes - Playwright') {
             steps {
