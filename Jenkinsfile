@@ -47,10 +47,10 @@ pipeline {
                 dir('estudo-playwright') {
                     bat 'docker-compose build'
                     bat 'docker-compose up -d'
-                    echo 'Aguardando o backend ficar disponível (http://localhost:3000/health)...'
+                    echo 'Aguardando o backend ficar disponível...'
                     bat '''
                       for /L %%i in (1,1,12) do (
-                      curl -s -o nul -w "%%{http_code}" http://localhost:3000/health && goto ok
+                      curl -s -o nul -w "%%{http_code}" http://localhost:3000/db-health && goto ok
                       echo Tentativa %%i falhou, aguardando...
                       timeout /T 5 >nul
                       )
