@@ -61,7 +61,7 @@ pipeline {
                       '''
 											bat '''
                       for /L %%i in (1,1,12) do (
-                      curl -s -o nul -w "%%{http_code}" http://frontend:3001 && goto ok
+                      curl -s -o nul -w "%%{http_code}" http://localhost:3001 && goto ok
                       echo Tentativa %%i falhou, aguardando...
                       timeout /T 15 >nul
                       )
