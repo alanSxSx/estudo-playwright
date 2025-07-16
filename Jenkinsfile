@@ -105,6 +105,24 @@ pipeline {
             }
         }
 
+				stage('Analise SonarQube - Frontend') {
+          steps {
+            dir('estudo-playwright/projnextauth') {
+              withSonarQubeEnv('SONAR_LOCAL') {
+                bat """
+                  ${scannerHome}\\bin\\sonar-scanner ^
+                  -Dsonar.projectBaseDir=. ^
+                  -Dsonar.projectKey=projnextauth ^
+                  -Dsonar.sources=. ^
+                  -Dsonar.exclusions=**/node_modules/**,**/__tests__/**,**/*.test.tsx,**/*.spec.tsx,**/coverage/** ^
+                  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info ^
+                  -Dsonar.login=sqa_9efad1dbc88e9bb045c0cbc5f282080d8f07a33f
+                  """
+            }
+        }
+    }
+}
+
         stage('Quality Gate') {
             steps {
                 timeout(time: 1, unit: 'MINUTES') {
