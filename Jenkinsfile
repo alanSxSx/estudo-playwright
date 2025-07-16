@@ -54,10 +54,21 @@ pipeline {
                       echo Tentativa %%i falhou, aguardando...
                       timeout /T 5 >nul
                       )
-                      echo Falha ao conectar no backend.
+                      echo Falha ao conectar ao BANCO de dados.
                       exit /B 1
                       :ok
-                      echo Backend OK
+                      echo Banco de Dados OK
+                      '''
+											bat '''
+                      for /L %%i in (1,1,12) do (
+                      curl -s -o nul -w "%%{http_code}" http://frontend:3001 && goto ok
+                      echo Tentativa %%i falhou, aguardando...
+                      timeout /T 5 >nul
+                      )
+                      echo Falha ao conectar no frontend.
+                      exit /B 1
+                      :ok
+                      echo FrontEnd OK
                       '''
             }
           }
