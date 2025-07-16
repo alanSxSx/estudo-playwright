@@ -52,7 +52,7 @@ pipeline {
                       for /L %%i in (1,1,12) do (
                       curl -s -o nul -w "%%{http_code}" http://localhost:3000/db-health && goto ok
                       echo Tentativa %%i falhou, aguardando...
-                      timeout /T 5 >nul
+                      timeout /T 15 >nul
                       )
                       echo Falha ao conectar ao BANCO de dados.
                       exit /B 1
@@ -63,7 +63,7 @@ pipeline {
                       for /L %%i in (1,1,12) do (
                       curl -s -o nul -w "%%{http_code}" http://frontend:3001 && goto ok
                       echo Tentativa %%i falhou, aguardando...
-                      timeout /T 5 >nul
+                      timeout /T 15 >nul
                       )
                       echo Falha ao conectar no frontend.
                       exit /B 1
