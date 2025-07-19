@@ -82,10 +82,20 @@ pipeline {
             }
         }
 
-        stage('Executar Testes Backend') {
+        stage('Executar Testes Unitários Backend') {
             steps {
                 dir('estudo-playwright') {
-                    bat 'docker-compose run --rm jest'
+                    // bat 'docker-compose run --rm jest'
+										bat 'docker-compose exec backend npm run test'
+                }
+            }
+        }
+
+				stage('Executar Testes Unitários Frontend') {
+            steps {
+                dir('estudo-playwright') {
+                    // bat 'docker-compose run --rm jest'
+										bat 'docker-compose exec frontend npm run test'
                 }
             }
         }
