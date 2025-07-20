@@ -136,7 +136,7 @@ pipeline {
                   -Dsonar.projectKey=projnextauth ^
                   -Dsonar.sources=. ^
                   -Dsonar.exclusions=**/node_modules/**,**/__tests__/**,**/*.test.tsx,**/*.spec.tsx, ^
-                  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info ^
+									-Dsonar.javascript.lcov.reportPaths=../coverage-frontend/lcov.info ^
                   -Dsonar.login=sqa_9efad1dbc88e9bb045c0cbc5f282080d8f07a33f
                   """
             }

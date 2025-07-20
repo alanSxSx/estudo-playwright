@@ -37,8 +37,7 @@ services:
       NEXTAUTH_URL: http://localhost:3001
       BACKEND_URL: http://backend:3000
     volumes:
-    - ./projnextauth:/app
-    - ./projnextauth/coverage:/app/coverage
+    - ./coverage-frontend:/app/coverage
     depends_on:
       - backend
   # jest:
